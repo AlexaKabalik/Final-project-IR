@@ -128,6 +128,9 @@ class QueryProcessor:
     posting_dataframe = posting_dataframe.sort_values(by='order', ascending=False, inplace=False)
     return posting_dataframe.index.tolist()
 
+  def get_query_results_by_body(self, uniq_sorted_tokenized_query, query_len, k = 100):
+    pass
+
 
   def get_page_ranks_for_doc_ids(self, doc_id_lst):
     """
