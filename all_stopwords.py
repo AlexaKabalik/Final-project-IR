@@ -14,4 +14,4 @@ corpus_stopwords = ["category", "references", "also", "external", "links",
                     "many", "however", "would", "became"]
 
 all_stopwords = english_stopwords.union(corpus_stopwords)
-print(all_stopwords)
+# print(all_stopwords)

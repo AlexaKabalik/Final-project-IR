@@ -1,4 +1,6 @@
 from flask import Flask, request, jsonify
+from querry_search import tokenize_query, QueryProcessor
+
 
 class MyFlaskApp(Flask):
     def run(self, host=None, port=None, debug=None, **options):
@@ -7,6 +9,7 @@ class MyFlaskApp(Flask):
 app = MyFlaskApp(__name__)
 app.config['JSONIFY_PRETTYPRINT_REGULAR'] = False
 
+query_processor = QueryProcessor()
 
 @app.route("/search")
 def search():
@@ -30,6 +33,7 @@ def search():
     if len(query) == 0:
       return jsonify(res)
     # BEGIN SOLUTION
+    query_words, query_uniq_words = tokenize_query(query=query)
 
     # END SOLUTION
     return jsonify(res)
@@ -83,8 +87,11 @@ def search_title():
     res = []
     query = request.args.get('query', '')
     if len(query) == 0:
-      return jsonify(res)
+        return jsonify(res)
     # BEGIN SOLUTION
+    _, uniq_sorted_tokenized_query = tokenize_query(query)
+    wiki_id_lst = query_processor.get_query_results_by_title(uniq_sorted_tokenized_query= uniq_sorted_tokenized_query)
+    res = query_processor.doc_id_with_doc_titles(doc_id_lst=wiki_id_lst)
 
     # END SOLUTION
     return jsonify(res)
@@ -115,7 +122,9 @@ def search_anchor():
     if len(query) == 0:
       return jsonify(res)
     # BEGIN SOLUTION
-    
+    _, uniq_sorted_tokenized_query = tokenize_query(query)
+    wiki_id_lst = query_processor.get_query_results_by_anchor(uniq_sorted_tokenized_query=uniq_sorted_tokenized_query)
+    res = query_processor.doc_id_with_doc_titles(doc_id_lst=wiki_id_lst)
     # END SOLUTION
     return jsonify(res)
 
@@ -140,7 +149,7 @@ def get_pagerank():
     if len(wiki_ids) == 0:
       return jsonify(res)
     # BEGIN SOLUTION
-
+    res = query_processor.get_page_ranks_for_doc_ids(doc_id_lst=wiki_ids)
     # END SOLUTION
     return jsonify(res)
 
@@ -167,7 +176,7 @@ def get_pageview():
     if len(wiki_ids) == 0:
       return jsonify(res)
     # BEGIN SOLUTION
-
+    res = list(query_processor.page_ranks.loc[wiki_ids, 'views'])
     # END SOLUTION
     return jsonify(res)
 
