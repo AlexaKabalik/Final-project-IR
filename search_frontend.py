@@ -33,8 +33,11 @@ def search():
     if len(query) == 0:
       return jsonify(res)
     # BEGIN SOLUTION
-    query_words, query_uniq_words = tokenize_query(query=query)
-
+    filtered_sorted_query_tokens, uniq_sorted_tokenized_query = tokenize_query(query=query)
+    doc_id_lst = query_processor.query_search_combination(uniq_sorted_tokenized_query=uniq_sorted_tokenized_query,
+                                                          query_len=len(filtered_sorted_query_tokens), body_weight=0.15,
+                                                          title_weight=0.6, anchor_weight=0.5, top_res=100)
+    res = query_processor.doc_id_with_doc_titles(doc_id_lst=doc_id_lst)
     # END SOLUTION
     return jsonify(res)
 
@@ -60,6 +63,10 @@ def search_body():
       return jsonify(res)
     # BEGIN SOLUTION
 
+    filtered_sorted_query_tokens, uniq_sorted_tokenized_query = tokenize_query(query)
+    doc_id_lst = query_processor.get_query_results_by_body(uniq_sorted_tokenized_query=uniq_sorted_tokenized_query,
+                                                           query_len=len(filtered_sorted_query_tokens))
+    res = query_processor.doc_id_with_doc_titles(doc_id_lst=doc_id_lst)
     # END SOLUTION
     return jsonify(res)
 
@@ -90,8 +97,8 @@ def search_title():
         return jsonify(res)
     # BEGIN SOLUTION
     _, uniq_sorted_tokenized_query = tokenize_query(query)
-    wiki_id_lst = query_processor.get_query_results_by_title(uniq_sorted_tokenized_query= uniq_sorted_tokenized_query)
-    res = query_processor.doc_id_with_doc_titles(doc_id_lst=wiki_id_lst)
+    doc_id_lst = query_processor.get_query_results_by_title(uniq_sorted_tokenized_query= uniq_sorted_tokenized_query)
+    res = query_processor.doc_id_with_doc_titles(doc_id_lst=doc_id_lst)
 
     # END SOLUTION
     return jsonify(res)
@@ -123,8 +130,8 @@ def search_anchor():
       return jsonify(res)
     # BEGIN SOLUTION
     _, uniq_sorted_tokenized_query = tokenize_query(query)
-    wiki_id_lst = query_processor.get_query_results_by_anchor(uniq_sorted_tokenized_query=uniq_sorted_tokenized_query)
-    res = query_processor.doc_id_with_doc_titles(doc_id_lst=wiki_id_lst)
+    doc_id_lst = query_processor.get_query_results_by_anchor(uniq_sorted_tokenized_query=uniq_sorted_tokenized_query)
+    res = query_processor.doc_id_with_doc_titles(doc_id_lst=doc_id_lst)
     # END SOLUTION
     return jsonify(res)
 
