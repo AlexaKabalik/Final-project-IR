@@ -84,9 +84,14 @@ class QueryProcessor:
     self.doc_norm_factor_dict = pd.read_pickle(pkl_path)
     pkl_path= f'{self.path}index/page_views.pkl'
     self.page_views = pd.read_pickle(pkl_path)
-    page_rank_path = f'{self.path}page_rank/page_rank.csv.gz'
-    self.page_ranks = pd.read_csv(page_rank_path, compression='gzip', header=None).rename({0: 'doc_id', 1: 'order'},
-                                                                                          axis=1)
+    # page_rank_path = f'{self.path}page_rank/page_rank.csv.gz'
+    # self.page_ranks = pd.read_csv(page_rank_path, compression='gzip', header=None).rename({0: 'doc_id', 1: 'order'},
+    #                                                                                       axis=1)
+    pkl_path = f'{self.path}index/pagerank.pkl'
+    self.page_ranks = pd.read_pickle(pkl_path)
+
+    # with open(pkl_path, 'rb') as f:
+    #   self.page_ranks = defaultdict(int, pickle.loads(f.read()))
 
 
   def get_query_results_by_title(self, uniq_sorted_tokenized_query, is_from_frontend = False):
@@ -213,11 +218,12 @@ class QueryProcessor:
         page_rank = self.page_ranks[self.page_ranks.doc_id == doc_id]['order'].value[0]
         doc_id_page_rank_lst.append(page_rank)
       except Exception:
-        doc_id_page_rank_lst(0)
+        doc_id_page_rank_lst.append(0)
+    # doc_id_page_rank_lst = [self.page_ranks[doc_id] for doc_id in doc_id_lst]
     return doc_id_page_rank_lst
 
-  def query_search_combination(self, uniq_sorted_tokenized_query, query_len, top_body_res = 400, top_res = 100, body_weight = 0.2,
-                               title_weight = 0.8, anchor_weight = 0.6):
+  def query_search_combination(self, uniq_sorted_tokenized_query, query_len, top_body_res = 400, top_res = 100, body_weight = 0.5,
+                               title_weight = 0.8, anchor_weight = 0.1):
     """
     The function combain a search results first by body what return best top_body_res results then it search by title and anchor.
     At the end, function sum the results by the weight of each part.

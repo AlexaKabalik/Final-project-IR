@@ -183,7 +183,9 @@ def get_pageview():
     if len(wiki_ids) == 0:
       return jsonify(res)
     # BEGIN SOLUTION
-    res = list(query_processor.page_ranks.loc[wiki_ids, 'order'])
+    # print(list(query_processor.page_views)[:10])
+    # res = list(query_processor.page_views.loc[wiki_ids, 'order'])
+    res = [v for k,v in query_processor.page_views.items() if k in wiki_ids]
     # END SOLUTION
     return jsonify(res)
 
