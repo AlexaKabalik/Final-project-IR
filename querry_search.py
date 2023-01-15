@@ -11,7 +11,7 @@ from inverted_index_gcp import InvertedIndex as InvertedIndex
 TUPLE_SIZE = 6
 TF_MASK = 2 ** 16 - 1 # Masking the 16 low bits of an integer
 CORPUS_SIZE = 6348910 # Corpus size from assignment 3 GCP
-BASE_PATH='/content/drive/MyDrive/final_project'
+BASE_PATH = '/home/chilikoa/'
 
 # We download all the stopword from library, then we add our corpus stopword from assignment 3 GCP
 nltk.download('stopwords')
@@ -26,7 +26,7 @@ corpus_stopwords = ["category", "references", "also", "external", "links",
                     "many", "however", "would", "became"]
 
 all_stopwords = english_stopwords.union(corpus_stopwords)
-
+print("Sasha allstopwords")
 def tokenize(text):
   return [token.group() for token in RE_WORD.finditer(text.lower())]
 
@@ -70,10 +70,23 @@ class QueryProcessor:
     self.load_pre_calculeted_data()
 
   def load_pre_calculeted_data(self):
-    # temp = self.path + '/title_postings'
-    self.body_inverted_index = InvertedIndex.read_index(base_dir= self.path + './text_postings_gcp',name='inverted_index')
-    self.title_inverted_index = InvertedIndex.read_index(base_dir= self.path +'./title_postings_gcp', name='inverted_index')
-    self.anchor_inverted_index = InvertedIndex.read_index(base_dir= self.path + '/anchor_postings_gcp', name='inverted_index')
+    # load all inverted indexs
+    self.body_inverted_index = InvertedIndex.read_index(base_dir= self.path + 'text_postings_gcp',name='text_inverted_index')
+    self.title_inverted_index = InvertedIndex.read_index(base_dir= self.path + 'title_postings_gcp',name='title_inverted_index')
+    self.anchor_inverted_index = InvertedIndex.read_index(base_dir= self.path + 'anchor_postings_gcp', name='anchor_inverted_index')
+
+    #load all csv and pkl files
+    pkl_path = f'{self.path}index/doc_len_dict.pkl'
+    self.doc_length_dict = pd.read_pickle(pkl_path)
+    pkl_path= f'{self.path}index/doc_to_title.pkl'
+    self.doc_title_dict = pd.read_pickle(pkl_path)
+    pkl_path = f'{self.path}index/doc_id_nf.pkl'
+    self.doc_norm_factor_dict = pd.read_pickle(pkl_path)
+    pkl_path= f'{self.path}index/page_views.pkl'
+    self.page_views = pd.read_pickle(pkl_path)
+    page_rank_path = f'{self.path}page_rank/page_rank.csv.gz'
+    self.page_ranks = pd.read_csv(page_rank_path, compression='gzip', header=None).rename({0: 'doc_id', 1: 'order'},
+                                                                                          axis=1)
 
 
   def get_query_results_by_title(self, uniq_sorted_tokenized_query, is_from_frontend = False):
@@ -90,18 +103,19 @@ class QueryProcessor:
     for token in uniq_sorted_tokenized_query:
       token_posting_list = read_posting_list(inverted=title_inverted_index, w=token, posting_list_path=self.path+'/title_postings_gcp/')
       if first_iteration == True:
+        first_iteration = False
         posting_dataframe = pd.DataFrame(token_posting_list).set_index(0).rename(columns={1: token})
       else:
         next_posting_dataframe = pd.DataFrame(token_posting_list).set_index(0).rename(columns={1: token})
-        posting_dataframe = next_posting_dataframe.join(next_posting_dataframe, how='outer') #outer: form union of calling frame’s index (or column if on is specified) with other’s index, and sort it. lexicographically.
+        posting_dataframe = posting_dataframe.join(next_posting_dataframe, how='outer') #outer: form union of calling frame’s index (or column if on is specified) with other’s index, and sort it. lexicographically.
 
-    posting_dataframe[~next_posting_dataframe.isna()] = 1 #replase a number with 1
+    posting_dataframe[~posting_dataframe.isna()] = 1 #replase a number with 1
     posting_dataframe.fillna(0, inplace=True) # replase a NA with 0
 
     posting_dataframe['order'] = posting_dataframe.sum(axis=1)
     posting_dataframe = posting_dataframe.sort_values(by='order', ascending=False, inplace=False)
     if is_from_frontend:
-      ratings = list(posting_dataframe['order'].itertuples(name=None))
+      ratings = list(posting_dataframe[['order']].itertuples(name=None))
       return ratings,posting_dataframe.index.tolist()
     return posting_dataframe.index.tolist()
       
@@ -137,19 +151,20 @@ class QueryProcessor:
     for token in uniq_sorted_tokenized_query:
       token_posting_list = read_posting_list(inverted=anchor_inverted_index, w=token, posting_list_path=self.path+'/anchor_postings_gcp/')
       if first_iteration == True:
+        first_iteration = False
         posting_dataframe = pd.DataFrame(token_posting_list).set_index(0).rename(columns={1: token})
       else:
         next_posting_dataframe = pd.DataFrame(token_posting_list).set_index(0).rename(columns={1: token})
         # outer: form union of calling frame’s index (or column if on is specified) with other’s index, and sort it. lexicographically.
-        posting_dataframe = next_posting_dataframe.join(next_posting_dataframe, how='outer')
+        posting_dataframe = posting_dataframe.join(next_posting_dataframe, how='outer')
 
-    posting_dataframe[~next_posting_dataframe.isna()] = 1 #replase a number with 1
+    posting_dataframe[~posting_dataframe.isna()] = 1 #replase a number with 1
     posting_dataframe.fillna(0, inplace=True) # replase a NA with 0
 
     posting_dataframe['order'] = posting_dataframe.sum(axis=1)
     posting_dataframe = posting_dataframe.sort_values(by='order', ascending=False, inplace=False)
     if is_from_frontend:
-      ratings = list(posting_dataframe['order'].itertuples(name=None))
+      ratings = list(posting_dataframe[['order']].itertuples(name=None))
       return ratings, posting_dataframe.index.tolist()
     return posting_dataframe.index.tolist()
 
