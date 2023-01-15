@@ -26,7 +26,7 @@ corpus_stopwords = ["category", "references", "also", "external", "links",
                     "many", "however", "would", "became"]
 
 all_stopwords = english_stopwords.union(corpus_stopwords)
-print("Sasha allstopwords")
+
 def tokenize(text):
   return [token.group() for token in RE_WORD.finditer(text.lower())]
 
@@ -209,7 +209,8 @@ class QueryProcessor:
     doc_id_page_rank_lst = []
     for doc_id in doc_id_lst:
       try:
-        page_rank = self.page_ranks[self.page_ranks.doc_id == doc_id]['page_rank'].value[0]
+        print(self.page_ranks[self.page_ranks.doc_id == doc_id])
+        page_rank = self.page_ranks[self.page_ranks.doc_id == doc_id]['order'].value[0]
         doc_id_page_rank_lst.append(page_rank)
       except Exception:
         doc_id_page_rank_lst(0)
