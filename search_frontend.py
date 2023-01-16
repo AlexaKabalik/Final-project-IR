@@ -35,8 +35,8 @@ def search():
     # BEGIN SOLUTION
     filtered_sorted_query_tokens, uniq_sorted_tokenized_query = tokenize_query(query=query)
     doc_id_lst = query_processor.query_search_combination(uniq_sorted_tokenized_query=uniq_sorted_tokenized_query,
-                                                          query_len=len(filtered_sorted_query_tokens), body_weight=0.15,
-                                                          title_weight=0.6, anchor_weight=0.5, top_res=100)
+                                                          query_len=len(filtered_sorted_query_tokens), body_weight=0.2,
+                                                          title_weight=0.9, anchor_weight=0.9, top_res=40)
     res = query_processor.doc_id_with_doc_titles(doc_id_lst=doc_id_lst)
     # END SOLUTION
     return jsonify(res)

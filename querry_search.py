@@ -189,12 +189,16 @@ class QueryProcessor:
     for token in uniq_sorted_tokenized_query:
       token_posting_list = read_posting_list(inverted=self.body_inverted_index, w=token,
                                              posting_list_path=self.path+'/text_postings_gcp/')
+      #idf calculation for each term
       idf_token = np.log10(CORPUS_SIZE/self.body_inverted_index.df[token])
       for doc_id, tf in token_posting_list:
-          query_doc_similarity[doc_id] += (tf/self.doc_length_dict[int(doc_id)]*idf_token)
+        #similarity between query and docs by calculation of tf-idf
+          query_doc_similarity[doc_id] += (tf/self.doc_length_dict[int(doc_id)])*idf_token
+    # raiting of the results
     query_doc_similarity_score = defaultdict(int)
     for doc_id, tf_idf in query_doc_similarity.items():
       query_doc_similarity_score[doc_id] = tf_idf * (1/query_len) * self.doc_norm_factor_dict[doc_id]
+        # sort the results by tf-idf score
     sim_score = sorted(query_doc_similarity_score.items(), key=lambda item: item[1], reverse=True)[:top_res]
     doc_ids = [tup[0] for tup in sim_score]
     if is_from_frontend:
@@ -222,8 +226,8 @@ class QueryProcessor:
     # doc_id_page_rank_lst = [self.page_ranks[doc_id] for doc_id in doc_id_lst]
     return doc_id_page_rank_lst
 
-  def query_search_combination(self, uniq_sorted_tokenized_query, query_len, top_body_res = 400, top_res = 100, body_weight = 0.5,
-                               title_weight = 0.8, anchor_weight = 0.1):
+  def query_search_combination(self, uniq_sorted_tokenized_query, query_len, top_body_res = 400, top_res = 200, body_weight = 0.7,
+                               title_weight = 0.2, anchor_weight = 0.1):
     """
     The function combain a search results first by body what return best top_body_res results then it search by title and anchor.
     At the end, function sum the results by the weight of each part.
