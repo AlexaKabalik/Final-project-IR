@@ -1,5 +1,5 @@
 # Final-project-IR
-Team BP - Alexandra Kabalik ID 322159450 Gill
+Team BP - Alexandra Kabalik ID 322159450 Gil Michalovich
 
 This gitHub contains a several files:
 1. small_inverted_index_gcp.py - was created for generation of inverted index based on queries_train, the inverted index was builded for body, title and anchor. This was done before working with all wikipedia data.
