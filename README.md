@@ -6,6 +6,7 @@ This gitHub contains a several files:
 2. inverted_index_gcp - was created for generation of inverted index for all corpus, also based on body, title and anchor. Also, contain page_rank score and page_view score for queiry retrival. The code in this notebook is based on the assignment 3 with redirection to bucket folders to keep the bin and pkl file for query retrival.
 3. run_fronted_gcp - implementation of query retrival, has a seach functions
 4. querry_search - cointain all the logic for implementation of search function
+5. search_fronted - implementation of search functions for documents retival
 
 liks:
 
