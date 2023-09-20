@@ -1,3 +1,7 @@
+# Search Engine Over Wikipedia.
+in this project we implemented a search engine over wikipedia using Google Cloud Platform and PySpark written in Pyhton
+
+
 # Final-project-IR
 Team BP - Alexandra Kabalik ID 322159450 Gil Michalovich 315041426
 
