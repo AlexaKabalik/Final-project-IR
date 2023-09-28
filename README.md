@@ -1,8 +1,8 @@
 
-## Overview
+# Overview
 This repository contains a Python-based search engine that indexes and searches the entire Wikipedia corpus using Google Cloud Platform (GCP) and PySpark. The search engine allows users to efficiently search for articles and retrieve relevant information from the vast Wikipedia dataset.
 
-# Table of Contents
+## Table of Contents
 Features
 Getting Started
 Prerequisites
@@ -17,7 +17,7 @@ License
  Powerful Search: Provides a robust search capability for querying articles.
  Scalable Architecture: Leverages PySpark and GCP services for scalability.
  Detailed Documentation: Offers clear documentation and code comments for easy understanding.
-# Prerequisites
+## Prerequisites
 Before you start, ensure you have met the following requirements:
 
 Python 3.x installed.
@@ -65,8 +65,14 @@ Architecture Diagram
 
 The search engine utilizes a scalable architecture that leverages GCP services for data storage and processing. PySpark is used for efficient indexing, and the search engine itself is deployed on a suitable platform.
 
-# Data Pipeline
+## Data Pipeline
 The data pipeline consists of multiple stages, including data acquisition, preprocessing, indexing, and querying. These stages are orchestrated to ensure that the Wikipedia corpus is efficiently transformed into a searchable index.
+## Code Architechture:
+1. small_inverted_index_gcp.py - was created for generation of inverted index based on queries_train, the inverted index was builded for body, title and anchor. This was done before working with all wikipedia data.
+2. inverted_index_gcp - was created for generation of inverted index for all corpus, also based on body, title and anchor. Also, contain page_rank score and page_view score for queiry retrival. The code in this notebook is based on the assignment 3 with redirection to bucket folders to keep the bin and pkl file for query retrival.
+3. run_fronted_gcp - implementation of query retrival, has a seach functions
+4. querry_search - cointain all the logic for implementation of search function
+5. search_fronted - implementation of search functions for documents retival
 # Final-project-IR
 Team BP - Alexandra Kabalik ID 322159450 Gil Michalovich 315041426
 
@@ -77,7 +83,7 @@ This gitHub contains a several files:
 4. querry_search - cointain all the logic for implementation of search function
 5. search_fronted - implementation of search functions for documents retival
 
-liks:
+## Links:
 
 url to our [Bucket](https://console.cloud.google.com/storage/browser/inverted_index_creation;tab=objects?forceOnBucketsSortingFiltering=false&organizationId=536124907474&project=alexandrakabalik&prefix=&forceOnObjectsSortingFiltering=false)
  containing all files and notebooks
