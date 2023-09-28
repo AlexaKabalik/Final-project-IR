@@ -1,8 +1,8 @@
 
-Overview
+## Overview
 This repository contains a Python-based search engine that indexes and searches the entire Wikipedia corpus using Google Cloud Platform (GCP) and PySpark. The search engine allows users to efficiently search for articles and retrieve relevant information from the vast Wikipedia dataset.
 
-Table of Contents
+# Table of Contents
 Features
 Getting Started
 Prerequisites
@@ -12,12 +12,12 @@ Architecture
 Data Pipeline
 Contributing
 License
-Features
-Efficient Indexing: Indexes the entire Wikipedia corpus for fast and accurate search results.
-Powerful Search: Provides a robust search capability for querying articles.
-Scalable Architecture: Leverages PySpark and GCP services for scalability.
-Detailed Documentation: Offers clear documentation and code comments for easy understanding.
-Prerequisites
+## Features
+ Efficient Indexing: Indexes the entire Wikipedia corpus for fast and accurate search results.
+ Powerful Search: Provides a robust search capability for querying articles.
+ Scalable Architecture: Leverages PySpark and GCP services for scalability.
+ Detailed Documentation: Offers clear documentation and code comments for easy understanding.
+# Prerequisites
 Before you start, ensure you have met the following requirements:
 
 Python 3.x installed.
@@ -50,11 +50,11 @@ Indexing:
 
 Use PySpark to run the indexing process to create the search index.
 
-Deployment:
+## Deployment:
 
 Deploy the search engine and interact with it.
 
-Usage
+## Usage
 Detailed instructions on how to use the search engine can be found in the project's documentation. You can run queries and retrieve information from the indexed Wikipedia corpus.
 
 bash
@@ -65,18 +65,8 @@ Architecture Diagram
 
 The search engine utilizes a scalable architecture that leverages GCP services for data storage and processing. PySpark is used for efficient indexing, and the search engine itself is deployed on a suitable platform.
 
-Data Pipeline
+# Data Pipeline
 The data pipeline consists of multiple stages, including data acquisition, preprocessing, indexing, and querying. These stages are orchestrated to ensure that the Wikipedia corpus is efficiently transformed into a searchable index.
-
-Contributing
-Contributions to this project are welcome. Feel free to open issues, submit pull requests, or provide suggestions for improvements. Please follow the project's code of conduct.
-
-License
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-
-
-
 # Final-project-IR
 Team BP - Alexandra Kabalik ID 322159450 Gil Michalovich 315041426
 
